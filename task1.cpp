@@ -6,8 +6,8 @@ using namespace std;
 enum Categorie
 {
     Food = 1,
-    Tools,
-    Equipment
+    Tools = 2,
+    Equipment = 3
 };
 
 struct Items
@@ -24,9 +24,18 @@ private:
     struct Items item;
 
 public:
-    Item(){};
+    Item()
+    {
+        cout << endl
+             << "default constructor called" << endl
+             << endl;
+    };
     Item(struct Items item) : item(item)
     {
+        cout << endl
+             << "parametrized constructor called" << endl
+             << endl;
+        this->item = item;
         switch (item.categorie)
         {
         case (Categorie::Food):
@@ -93,22 +102,23 @@ public:
         cout << "Item Categories : ";
         switch (item.categorie)
         {
-        case 0:
+        case (Categorie::Food):
             cout << "Food";
             break;
-        case 1:
+        case (Categorie::Tools):
             cout << "Tools";
             break;
-        case 2:
+        case (Categorie::Equipment):
             cout << "Equipment";
             break;
         }
         cout << endl;
     };
+
     static void display_total_categories()
     {
         cout << "-----------------------------------------" << endl;
-        cout << "-------- Total Items : " << total_foods << " --------" << endl;
+        cout << "-------- Total Items : " << total_items << " --------" << endl;
         cout << "Total Food : " << total_foods << endl;
         cout << "Total Tools : " << total_tools << endl;
         cout << "Total Equipment : " << total_equipment << endl
@@ -117,51 +127,61 @@ public:
              << endl;
     }
 
-    void operator++()
+    static void totalIncrement()
     {
-        ++total_items;
+        total_items += 1;
     }
 };
 
-int Item::total_items = 0;
+int Item::total_items = 1;
 int Item::total_foods = 0;
 int Item::total_tools = 0;
 int Item::total_equipment = 0;
 
-bool checkDubilcateId(int id, Item *items)
+void showAllItems(Item *items);
+
+bool isIdUsedBefore(int id, Item *items)
 {
     for (int i = 0; i < Item::total_items; i++)
     {
-        if (items[i].get_id() == id)
+
+        if (id == items[i].get_id())
         {
             return true;
         }
     }
-
     return false;
 };
 
-void addNewItem(Item *&items)
+void showAllItems(Item *items)
 {
-    Item *temp = new Item[Item::total_items + 1];
-
     for (int i = 0; i < Item::total_items; i++)
     {
-        temp[i] = items[i];
+        items[i].display();
+        cout << endl;
     }
+    cout << endl;
+    Item::display_total_categories();
+};
 
+Items createNewItem(Item *items)
+{
     struct Items single_item;
     cout << "Enter Item id : ";
     while (1)
     {
         cin >> single_item.id;
-        if (!checkDubilcateId(single_item.id, items))
-        {
+        if (Item::total_equipment == 1)
             break;
+
+        if (isIdUsedBefore(single_item.id, items))
+        {
+            cout << "id already used try another :";
+            continue;
         }
         else
         {
-            cout << "id already used try another :";
+            break;
         }
         cin.ignore();
     }
@@ -171,6 +191,7 @@ void addNewItem(Item *&items)
     getline(cin, single_item.name);
     cout << "Enter Quantity :";
     cin >> single_item.quantity;
+
     int ctg;
     while (1)
     {
@@ -185,39 +206,53 @@ void addNewItem(Item *&items)
             cout << "Incorrect categorie chose again ! " << endl;
         }
     }
-    single_item.categorie = Categorie(1);
+    single_item.categorie = Categorie(ctg);
 
-    Item new_item(single_item);
-    // incrementing the the total item (staic variable strig items)
-    // ++new_item;
+    // Item new_item = Item(single_item);
+    // return new_item;
+    return single_item;
+}
 
-    cout << Item::total_items;
-    // temp[Item::total_items] = new_item;
-    ++new_item;
-
-    items = temp;
-    // deleting the temperory items array
-    // delete[] temp;
-};
-void showAllItems(Item *items)
+void saddnew(Item(*items))
 {
-    for (int i = 0; i < Item::total_items; i++)
+    Item::totalIncrement();
+    Item *newItems = new Item[Item::total_items];
+    if (Item::total_items > 1)
     {
-        items[i].display();
-    }
-    cout << endl;
-    Item::display_total_categories();
-};
+        for (int i = 0; i < Item::total_items; i++)
+        {
+            // cout << "id is >> "<< i << endl;
 
+            newItems[i] = items[i];
+            cout << "id is >> " << i << endl;
+            if (i == Item::total_items - 1)
+            {
+                newItems[i] = Item(createNewItem(items));
+            }
+        }
+        delete[] items;
+    }
+
+    // temp[Item::total_items] = new_item;
+
+    showAllItems(newItems);
+    showAllItems(items);
+
+    items = newItems;
+    // deleting the temperory items array
+}
 int main()
 {
 
-    Item *items = new Item[Item::total_equipment];
+    cout << "Enter the first item to the list :" << endl;
+
+    Item *items = new Item[Item::total_items];
+    items[0] = Item(createNewItem(items));
 
     char choice1;
-
     while (1)
     {
+
         cout << "1:Add New Item\n2:Update item\n3.Retriev Item Detail\n4.Retriev Total Item \n0:Exit" << endl;
         cin >> choice1;
         cin.ignore();
@@ -225,7 +260,27 @@ int main()
         if (choice1 == '1')
         {
             system("clear");
-            addNewItem(items);
+            Item::totalIncrement();
+            Item *newItems = new Item[Item::total_items];
+
+            for (int i = 0; i < Item::total_items - 1; i++)
+            {
+                cout << "id is >> " << i << endl;
+
+                newItems[i] = items[i];
+                // // cout << "id is >> " << i << endl;
+                // if (i == Item::total_items - 1)
+                // {
+                // }
+            }
+            newItems[Item::total_items - 1] = Item(createNewItem(items));
+
+            delete[] items;
+
+            items = newItems;
+
+            // showAllItems(newItems);
+            showAllItems(items);
         }
         else if (choice1 == '2')
         {
