@@ -24,17 +24,16 @@ private:
     struct Items item;
 
 public:
-    Item()
-    {
-        cout << endl
-             << "default constructor called" << endl
-             << endl;
+    Item(){
+        // cout << endl
+        //      << "default constructor called" << endl
+        //      << endl;
     };
     Item(struct Items item) : item(item)
     {
-        cout << endl
-             << "parametrized constructor called" << endl
-             << endl;
+        // cout << endl
+        //      << "parametrized constructor called" << endl
+        //      << endl;
         this->item = item;
         switch (item.categorie)
         {
@@ -140,17 +139,16 @@ int Item::total_equipment = 0;
 
 void showAllItems(Item *items);
 
-bool isIdUsedBefore(int id, Item *items)
+int isIdUsedBefore(int id, Item *items)
 {
     for (int i = 0; i < Item::total_items; i++)
     {
-
         if (id == items[i].get_id())
         {
-            return true;
+            return i;
         }
     }
-    return false;
+    return -1;
 };
 
 void showAllItems(Item *items)
@@ -167,14 +165,15 @@ void showAllItems(Item *items)
 Items createNewItem(Item *items)
 {
     struct Items single_item;
+    int id;
     cout << "Enter Item id : ";
     while (1)
     {
-        cin >> single_item.id;
+        cin >> id;
         if (Item::total_equipment == 1)
             break;
 
-        if (isIdUsedBefore(single_item.id, items))
+        if (isIdUsedBefore(id, items) != -1)
         {
             cout << "id already used try another :";
             continue;
@@ -185,6 +184,7 @@ Items createNewItem(Item *items)
         }
         cin.ignore();
     }
+    single_item.id = id;
     cout << "Enter Name : ";
     // cin >> item.name;
     cin.ignore();
@@ -207,40 +207,9 @@ Items createNewItem(Item *items)
         }
     }
     single_item.categorie = Categorie(ctg);
-
-    // Item new_item = Item(single_item);
-    // return new_item;
     return single_item;
 }
 
-void saddnew(Item(*items))
-{
-    Item::totalIncrement();
-    Item *newItems = new Item[Item::total_items];
-    if (Item::total_items > 1)
-    {
-        for (int i = 0; i < Item::total_items; i++)
-        {
-            // cout << "id is >> "<< i << endl;
-
-            newItems[i] = items[i];
-            cout << "id is >> " << i << endl;
-            if (i == Item::total_items - 1)
-            {
-                newItems[i] = Item(createNewItem(items));
-            }
-        }
-        delete[] items;
-    }
-
-    // temp[Item::total_items] = new_item;
-
-    showAllItems(newItems);
-    showAllItems(items);
-
-    items = newItems;
-    // deleting the temperory items array
-}
 int main()
 {
 
@@ -248,39 +217,28 @@ int main()
 
     Item *items = new Item[Item::total_items];
     items[0] = Item(createNewItem(items));
+    system("clear");
 
     char choice1;
     while (1)
     {
-
         cout << "1:Add New Item\n2:Update item\n3.Retriev Item Detail\n4.Retriev Total Item \n0:Exit" << endl;
         cin >> choice1;
         cin.ignore();
-        // cin.clear();
         if (choice1 == '1')
         {
             system("clear");
             Item::totalIncrement();
             Item *newItems = new Item[Item::total_items];
-
             for (int i = 0; i < Item::total_items - 1; i++)
             {
-                cout << "id is >> " << i << endl;
-
                 newItems[i] = items[i];
-                // // cout << "id is >> " << i << endl;
-                // if (i == Item::total_items - 1)
-                // {
-                // }
             }
             newItems[Item::total_items - 1] = Item(createNewItem(items));
-
             delete[] items;
-
             items = newItems;
-
-            // showAllItems(newItems);
-            showAllItems(items);
+            cout << "Sucessfully added " << endl
+                 << endl;
         }
         else if (choice1 == '2')
         {
@@ -288,11 +246,141 @@ int main()
             if (Item::total_items <= 0)
             {
                 cout << "-----------------------------------------" << endl
-                     << "Nothing here ,  add some items first!" << endl
+                     << "Nothing here , add some items first!" << endl
                      << "-----------------------------------------" << endl;
             }
             else
-                cout << "updating new items" << endl;
+            {
+                int id;
+                while (1)
+                {
+                    cout << "Enter the item id :" << endl;
+                    cin >> id;
+                    int idInArray = isIdUsedBefore(id, items);
+                    if (idInArray == -1)
+                    {
+                        cout << "No Item Found with this id !" << endl;
+                        break;
+                    }
+                    else
+                    {
+                        // for updating name
+                        {
+                            char update;
+                            while (1)
+                            {
+                                cout << "Update Name ? (y/n):";
+                                cin >> update;
+                                if (update != 'y' && update != 'n')
+                                {
+                                    cout << "wrong input try again !" << endl;
+                                    continue;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                                cin.ignore();
+                            }
+                            if (update == 'y')
+                            {
+                                string name;
+                                cout << "Enter Name : ";
+                                // cin >> item.name;
+                                cin.ignore();
+                                getline(cin, name);
+                                items[idInArray].set_name(name);
+                            }
+                        }
+                        // for updating quantity
+                        {
+                            char update;
+                            while (1)
+                            {
+                                cout << "Update Quantity ? (y/n):";
+                                cin >> update;
+                                if (update != 'y' && update != 'n')
+                                {
+                                    cout << "wrong input try again !" << endl;
+                                    continue;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            if (update == 'y')
+                            {
+                                int qty;
+                                cout << "Enter Quantity : ";
+                                cin >> qty;
+                                items[idInArray].set_quantity(qty);
+                            }
+                        }
+                        // for updating Categorie
+                        {
+                            char update;
+                            while (1)
+                            {
+                                cout << "Update Categorie ? (y/n):";
+                                cin >> update;
+                                if (update != 'y' && update != 'n')
+                                {
+                                    cout << "wrong input try again !" << endl;
+                                    continue;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            if (update == 'y')
+                            {
+                                int ctg;
+                                while (1)
+                                {
+                                    cout << "Enter categorie (1:Food,2:Tools,3:Equipment) : ";
+                                    cin >> ctg;
+                                    if (ctg >= 1 && ctg <= 3)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        cout << "Incorrect categorie chose again ! " << endl;
+                                    }
+                                }
+
+                                if (items[idInArray].get_categorie() == Categorie::Food)
+                                {
+                                    Item::total_foods -= 1;
+                                }
+                                else if (items[idInArray].get_categorie() == Categorie::Tools)
+                                {
+                                    Item::total_items -= 1;
+                                }
+                                else if (items[idInArray].get_categorie() == Categorie::Equipment)
+                                {
+                                    Item::total_equipment -= 1;
+                                }
+
+                                items[idInArray].set_categorie(Categorie(ctg));
+
+                                if (items[idInArray].get_categorie() == Categorie::Food)
+                                    Item::total_foods += 1;
+                                else if (items[idInArray].get_categorie() == Categorie::Tools)
+                                    Item::total_items += 1;
+                                else if (items[idInArray].get_categorie() == Categorie::Equipment)
+                                    Item::total_equipment += 1;
+                            }
+
+                            cout << "Updated sucessfully" << endl
+                                 << endl;
+                            break;
+                        }
+                    }
+                }
+            }
         }
         else if (choice1 == '3')
         {
@@ -318,6 +406,5 @@ int main()
             break;
         }
     }
-
     return 0;
 }
