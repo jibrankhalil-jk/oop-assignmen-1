@@ -3,6 +3,14 @@
 
 using namespace std;
 
+struct Items
+{
+    int uid;
+    string name;
+    int quantity;
+    Categories categorie;
+};
+
 enum Categories
 {
     Food,
@@ -18,15 +26,19 @@ public:
     static int total_equipment;
 
 private:
-    int uid;
-    string name;
-    int quantity;
-    Categories categorie;
+    // int uid;
+    // string name;
+    // int quantity;
+    // Categories categorie;
+
+    struct Items item;
 
 public:
     Item(){};
-    Item(int uid, string name, int quantity, Categories categorie) : uid(uid), name(name), quantity(quantity), categorie(categorie)
+    Item(int uid, string name, int quantity, Categories categorie)
     {
+
+item.uid = 
         switch (categorie)
         {
         case 0:
@@ -37,8 +49,6 @@ public:
             break;
         case 2:
             total_equipment++;
-            break;
-        default:
             break;
         }
     };
@@ -121,7 +131,7 @@ void addNewItem(Item *items, int size)
         temp[i] = items[i];
     }
     cout << "Enter Item id: ";
-    
+    cin >>
 };
 
 int main()
