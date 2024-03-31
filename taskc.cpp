@@ -1,119 +1,177 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
+#include <string>
 
 using namespace std;
-class Robot
+
+class AutonomousVehicle
 {
 protected:
-    string id;
-    string type;
-    string powerSource;
-    double maxSpeed;
-    double weight;
+    int id;
+    string vehicleType;
+    int batteryCapacity;
+    int maxSpeed;
 
 public:
-    Robot(){};
-    // Parameterized constructor
-    Robot(string id, string type, string powerSource, double maxSpeed, double weight)
-        : id(id), type(type), powerSource(powerSource), maxSpeed(maxSpeed), weight(weight) {}
+    AutonomousVehicle(){};
+    AutonomousVehicle(int id, string vehicleType, int batteryCapacity, int maxSpeed) : id(id), vehicleType(vehicleType), batteryCapacity(batteryCapacity), maxSpeed(maxSpeed){};
 
-    // Destructor
-    ~Robot() {}
+    int getId() { return id; }
+    string getvehicleType() { return vehicleType; }
+    int getBatteryCapacity() { return batteryCapacity; }
+    int getMaxSpeed() { return maxSpeed; }
 
-    // Getters for all attributes
-    string getId() { return id; }
-    string getType() { return type; }
-    string getPowerSource() { return powerSource; }
-    double getMaxSpeed() { return maxSpeed; }
-    double getWeight() { return weight; }
+    // setters
+    void setid(int id) { this->id = id; }
+    void settype(string vehicleType) { this->vehicleType = vehicleType; }
+    void setbatteryCapacity(int cap) { this->batteryCapacity = cap; }
+    void setmaxSpeed(int mxs) { this->maxSpeed = mxs; }
 
-    // Implementing copy constructor to ensure deep copy
-    Robot(const Robot &other)
+    // shallow copy
+    //  AutonomousVehicle(const AutonomousVehicle &other)
+    //  {
+    //      cout << "shallow copy" << endl;
+    //      id = other.id;
+    //      vehicleType = other.vehicleType;
+    //      batteryCapacity = other.batteryCapacity;
+    //      maxSpeed = other.maxSpeed;
+    //  }
+
+    // deep copy
+    // AutonomousVehicle(const AutonomousVehicle &vehical)
+    // {
+    //     id = *(new int(vehical.id));
+    //     vehicleType = *(new VehiclevehicleType(vehical.vehicleType));
+    //     batteryCapacity = *(new int(vehical.batteryCapacity));
+    //     maxSpeed = *(new int(vehical.maxSpeed));
+    // }
+
+    void display()
     {
-        id = other.id;
-        type = other.type;
-        powerSource = other.powerSource;
-        maxSpeed = other.maxSpeed;
-        weight = other.weight;
-    }
-
-    // Implementing assignment operator to ensure deep copy
-    Robot &operator=(const Robot &other)
-    {
-        if (this != &other)
-        {
-            id = other.id;
-            type = other.type;
-            powerSource = other.powerSource;
-            maxSpeed = other.maxSpeed;
-            weight = other.weight;
-        }
-        return *this;
-    }
-
-    // Function to display the details of the robot
-    void display() const
-    {
-        cout << "ID: " << id << "\n";
-        cout << "Type: " << type << "\n";
-        cout << "Power Source: " << powerSource << "\n";
-        cout << "Max Speed: " << maxSpeed << " m/s\n";
-        cout << "Weight: " << weight << " kg\n";
-        cout << "------------------------------------\n";
-    }
+        cout << "-----------------------------------------" << endl;
+        cout << "Id : " << id << "\t\t\t(" << &id << ")" << endl;
+        cout << "vehicleType : " << vehicleType << "\t\t(" << &vehicleType << ") " << endl;
+        cout << "Battery Capacity : " << batteryCapacity << "\t(" << &batteryCapacity << ")" << endl;
+        cout << "Max speed : " << maxSpeed << "m/s\t(" << &maxSpeed << ")" << endl;
+        cout << "-----------------------------------------" << endl
+             << endl;
+    };
 };
 
-// Function to perform a deep copy of the array/vector of Robot objects
-void deepCopy(const vector<Robot> &source, vector<Robot> &destination)
+class Sedan : protected AutonomousVehicle
 {
-    destination.resize(source.size());
-    transform(source.begin(), source.end(), destination.begin(), [](const Robot &robot)
-              { return Robot(robot); });
-}
+public:
+    Sedan(){};
+    Sedan(int id, int batteryCapacity, int maxSpeed)
+        : AutonomousVehicle(id, VehiclevehicleType::VehicleSedan, batteryCapacity, maxSpeed){};
 
-// Function to perform a shallow copy of the array/vector of Robot objects
-void shallowCopy(const vector<Robot> &source, vector<Robot> &destination)
+    // deep copy
+    Sedan(const Sedan &vehical)
+    {
+        id = *(new int(vehical.id));
+        vehicleType = *(new VehiclevehicleType(vehical.vehicleType));
+        batteryCapacity = *(new int(vehical.batteryCapacity));
+        maxSpeed = *(new int(vehical.maxSpeed));
+    }
+
+    // getters
+    int getId() { return id; }
+    string getvehicleType() { return vehicleType; }
+    int getBatteryCapacity() { return batteryCapacity; }
+    int getMaxSpeed() { return maxSpeed; }
+
+    // setters
+    void setId(int id) { id = id; }
+    void setvehicleType(string vehicleType) { vehicleType = vehicleType; }
+    void setBatteryCapacity(int cap) { batteryCapacity = cap; }
+    void setMaxSpeed(int mxs) { maxSpeed = mxs; }
+
+    void display()
+    {
+        cout << "-----------------------------------------" << endl;
+        cout << "Id : " << id << "\t\t\t(" << &id << ")" << endl;
+        cout << "vehicleType : " << vehicleType << "\t\t(" << &vehicleType << ") " << endl;
+        cout << "Battery Capacity : " << batteryCapacity << "\t(" << &batteryCapacity << ")" << endl;
+        cout << "Max speed : " << maxSpeed << "m/s\t(" << &maxSpeed << ")" << endl;
+        cout << "-----------------------------------------" << endl
+             << endl;
+    };
+};
+
+class Suv : protected AutonomousVehicle
 {
-    destination = source;
-}
+public:
+    Suv(){};
+    Suv(int id, int batteryCapacity, int maxSpeed)
+        : AutonomousVehicle(id, "Suv", batteryCapacity, maxSpeed){};
+
+    // getters
+    int getId() { return id; }
+    string getvehicleType() { return vehicleType; }
+    int getBatteryCapacity() { return batteryCapacity; }
+    int getMaxSpeed() { return maxSpeed; }
+
+    // setters
+    void setId(int id) { id = id; }
+    void setvehicleType(VehiclevehicleType vehicleType) { vehicleType = vehicleType; }
+    void setBatteryCapacity(int cap) { batteryCapacity = cap; }
+    void setMaxSpeed(int mxs) { maxSpeed = mxs; }
+
+    void display()
+    {
+        cout << "-----------------------------------------" << endl;
+        cout << "Id : " << id << "\t\t\t(" << &id << ")" << endl;
+        cout << "vehicleType : ";
+        switch (vehicleType)
+        {
+        case VehicleSedan:
+            cout << "Sedan";
+            break;
+        case VehicleSuv:
+            cout << "Sedan";
+            break;
+        }
+        cout << "\t\t(" << &vehicleType << ") " << endl;
+        cout << "Battery Capacity : " << batteryCapacity << "\t(" << &batteryCapacity << ")" << endl;
+        cout << "Max speed : " << maxSpeed << "m/s\t(" << &maxSpeed << ")" << endl;
+        cout << "-----------------------------------------" << endl
+             << endl;
+    };
+};
 
 int main()
 {
-    // Create an array of Robot objects
-    vector<Robot> robots = {
-        Robot("R1", "industrial", "battery", 2.5, 100.0),
-        Robot("R2", "humanoid", "solar", 1.2, 80.0),
-        Robot("R3", "aerial", "fuel", 12.0, 5.0)};
+    Sedan a(1, 20, 30);
+    cout << "=> A" << endl
+         << endl;
+    a.display();
+    Sedan *b;
 
-    // Display the details of each robot
-    cout << "Before copy operations:\n";
-    for (const Robot &robot : robots)
-    {
-        robot.display();
-    }
+    cout << "\n------ Creating Object using Shallow Copy ------" << endl;
+    b = &a; //  shallow copy
+    // b = &a; //  shallow copy
+    cout << "\n------ Creating Object using Deep Copy ------" << endl
+         << endl;
+    Sedan c(a); // deep copy constructor
 
-    // Perform a deep copy
-    vector<Robot> deepCopyRobots;
-    deepCopy(robots, deepCopyRobots);
+    cout << "=> B (Shallow Copy Object)" << endl
+         << endl;
+    b->display();
+    cout << "=> C (Deep Copy Object)" << endl
+         << endl;
+    c.display();
 
-    // Display the details of each robot after deep copy
-    cout << "\nAfter deep copy:\n";
-    for (const Robot &robot : deepCopyRobots)
-    {
-        robot.display();
-    }
-
-    // Perform a shallow copy
-    vector<Robot> shallowCopyRobots;
-    shallowCopy(robots, shallowCopyRobots);
-
-    // Display the details of each robot after shallow copy
-    cout << "\nAfter shallow copy:\n";
-    for (const Robot &robot : shallowCopyRobots)
-    {
-        robot.display();
-    }
+    cout << "changing the maximum speed of original object" << endl
+         << endl;
+    a.setMaxSpeed(3000);
+    cout << "=> A (Origianl Object)" << endl
+         << endl;
+    a.display();
+    cout << "=> B (Shallow Copy Object)" << endl
+         << endl;
+    b->display();
+    cout << "=> C (Deep Copy Object)" << endl
+         << endl;
+    c.display();
 
     return 0;
 }

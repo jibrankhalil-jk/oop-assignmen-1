@@ -6,8 +6,8 @@ using namespace std;
 enum Categorie
 {
     Food = 1,
-    Tools = 2,
-    Equipment = 3
+    Tools,
+    Equipment
 };
 
 struct Items
@@ -54,10 +54,10 @@ public:
         this->item = item;
     };
 
-    static int total_items;
-    static int total_foods;
-    static int total_tools;
-    static int total_equipment;
+    static long long int total_items;
+    static long long int total_foods;
+    static long long int total_tools;
+    static long long int total_equipment;
 
     void set_id(int id)
     {
@@ -132,10 +132,10 @@ public:
     }
 };
 
-int Item::total_items = 1;
-int Item::total_foods = 0;
-int Item::total_tools = 0;
-int Item::total_equipment = 0;
+long long int Item::total_items = 1;
+long long int Item::total_foods = 0;
+long long int Item::total_tools = 0;
+long long int Item::total_equipment = 0;
 
 void showAllItems(Item *items);
 
