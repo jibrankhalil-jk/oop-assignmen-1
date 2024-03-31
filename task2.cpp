@@ -14,7 +14,7 @@ private:
     double weight;      // (in kilograms)
 
 public:
-    Robot() {};
+    Robot(){};
     Robot(int id, string type, string powerSource, int maximum_Speed, double Weight) : id(id), type(type), powerSource(powerSource), maximum_Speed(maximum_Speed), weight(Weight){};
 
     // distructor
@@ -22,13 +22,6 @@ public:
 
     // shallow copy
     // Robot(const Robot &robo)
-    // {
-    //     this->id = robo.id;
-    //     this->type = robo.type;
-    //     this->powerSource = robo.powerSource;
-    //     this->maximum_Speed = robo.maximum_Speed;
-    //     this->weight = robo.weight;
-    // }
     // {
     //     cout << "shallow copy applied" << endl;
     //     this->id = robo.id;
@@ -39,40 +32,40 @@ public:
     // }
 
     // deep copy constructor
-    // Robot(Robot &&robo)
-    // {
-    //     cout << "deep copy applied" << endl;
-    //     this->id = robo.id;
-    //     this->type = robo.type;
-    //     this->powerSource = robo.powerSource;
-    //     this->maximum_Speed = robo.maximum_Speed;
-    //     this->weight = robo.weight;
-    // }
+    Robot(Robot &robo)
+    {
+        // cout << "deep copy applied" << endl;
+        this->id = *(new int(robo.id));
+        this->type = *(new string(robo.type));
+        this->powerSource = *(new string(robo.powerSource));
+        this->maximum_Speed = *(new int(robo.maximum_Speed));
+        this->weight = *(new int(robo.weight));
+    }
 
     // Assignment operator for shallow copy
     // Robot &operator=(const Robot &robo)
     // {
     //     if (this != &robo)
     //     {
-    //         id = robo.id;
-    //         type = robo.type;
-    //         powerSource = robo.powerSource;
-    //         maximum_Speed = robo.maximum_Speed;
-    //         weight = robo.weight;
+    //     this->id = *(new int(robo.id));
+    //     this->type = *(new string(robo.type));
+    //     this->powerSource = *(new string(robo.powerSource));
+    //     this->maximum_Speed = *(new int(robo.maximum_Speed));
+    //     this->weight = *(new int(robo.weight));
     //     }
     //     return *this;
     // }
 
-    // // Assignment operator for deep copy
+    // Assignment operator for deep copy
     // Robot &operator=(Robot &&robo)
     // {
     //     if (this != &robo)
     //     {
-    //         id = move(robo.id);
-    //         type = move(robo.type);
-    //         powerSource = move(robo.powerSource);
-    //         maximum_Speed = move(robo.maximum_Speed);
-    //         weight = move(robo.weight);
+    //         this->id = *(new int(robo.id));
+    //         this->type = *(new string(robo.type));
+    //         this->powerSource = *(new string(robo.powerSource));
+    //         this->maximum_Speed = *(new int(robo.maximum_Speed));
+    //         this->weight = *(new int(robo.weight));
     //     }
     //     return *this;
     // }
@@ -92,17 +85,10 @@ public:
 
 int main()
 {
-    Robot robs(1, "Aereal", "Battery", 200, 20.2);
 
-    robs.display();
+    Robot *robots = new Robot[1];
 
-    Robot a;
-
-    a = robs;
-
-    // Robot a(move(robs));
-
-    a.display();
+    robots[0] = Robot(1, "humanoid", "solar", 100, 20, 2);
 
     return 0;
 }

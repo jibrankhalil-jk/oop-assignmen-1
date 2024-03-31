@@ -2,6 +2,7 @@
     "files.associations": {
         "*.css": "tailwindcss",
         "*.html": "html",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "new": "cpp"
     }
 }
